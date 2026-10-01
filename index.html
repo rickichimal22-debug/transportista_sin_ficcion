@@ -65,11 +65,11 @@
                 </div>
             </section>
 
-            <!-- ================= VISTA 2: MAPA DE ASIENTOS (Oculta por defecto) ================= -->
+            <!-- ================= VISTA 2: MAPA DE ASIENTOS ESTILO PLANO VEHICULAR ================= -->
             <section id="vista-asientos" class="hidden flex-col flex-1 justify-between">
                 <div>
                     <!-- Botón de Regresar y Horario Activo -->
-                    <div class="flex justify-between items-center mb-4">
+                    <div class="flex justify-between items-center mb-3">
                         <button onclick="regresarAHorarios()" class="text-xs bg-gray-200 hover:bg-gray-300 font-semibold px-3 py-1.5 rounded-lg transition flex items-center gap-1">
                             ← Cambiar selección
                         </button>
@@ -78,32 +78,41 @@
 
                     <h2 class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-2">Selecciona tus <span id="cantidad-texto-titulo">1</span> asientos</h2>
                     
-                    <!-- Leyenda Actualizada -->
-                    <div class="flex justify-around text-xs text-gray-600 mb-4 bg-gray-50 p-2 rounded-lg">
+                    <!-- Leyenda -->
+                    <div class="flex justify-around text-xs text-gray-600 mb-3 bg-gray-50 p-2 rounded-lg border">
                         <div class="flex items-center gap-1"><span class="w-3 h-3 bg-white border border-gray-300 rounded-sm inline-block"></span> Libre</div>
                         <div class="flex items-center gap-1"><span class="w-3 h-3 bg-blue-600 rounded-sm inline-block"></span> Seleccionado</div>
                         <div class="flex items-center gap-1"><span class="w-3 h-3 bg-red-500 rounded-sm inline-block"></span> Ocupado</div>
                     </div>
 
-                    <!-- Vehículo (Crafter) -->
-                    <div class="border-2 border-gray-300 rounded-2xl p-4 bg-gray-50 max-w-xs mx-auto mb-4">
-                        <div class="flex justify-between border-b pb-3 mb-4 text-xs font-bold text-gray-400">
-                            <span>🚪 Puerta</span>
-                            <span>🚌 Volante (Chofer)</span>
+                    <!-- Plano del Vehículo (Estilo Butacas de Cine / Distribución Interna) -->
+                    <div class="border-4 border-gray-400 rounded-t-[40px] rounded-b-2xl p-4 bg-slate-100 max-w-xs mx-auto shadow-inner relative">
+                        
+                        <!-- Cabina / Frente del Vehículo -->
+                        <div class="flex justify-between items-center border-b-2 border-dashed border-gray-300 pb-3 mb-4 px-2">
+                            <div class="text-[10px] bg-gray-200 px-2 py-1 rounded font-bold text-gray-600">🚪 Puerta</div>
+                            <div class="text-xs font-bold text-gray-500 flex items-center gap-1">🛞 Chofer</div>
                         </div>
-                        <div id="mapa-asientos" class="grid grid-cols-4 gap-2">
-                            <!-- Se generan por JavaScript -->
+
+                        <!-- Distribución de Asientos (Filas con Pasillo Central) -->
+                        <div id="mapa-asientos" class="flex flex-col gap-2.5">
+                            <!-- Generado dinámicamente por JavaScript simulando filas de 4 (2 y 2 con pasillo) -->
+                        </div>
+
+                        <!-- Parte trasera -->
+                        <div class="mt-4 pt-2 border-t border-gray-300 text-center text-[10px] text-gray-400 font-bold tracking-widest uppercase">
+                            Parte Trasera
                         </div>
                     </div>
                 </div>
 
                 <!-- Resumen y Continuar (Fijo abajo) -->
-                <div class="mt-auto bg-blue-50 p-3 rounded-xl flex justify-between items-center">
+                <div class="mt-4 bg-blue-50 p-3 rounded-xl flex justify-between items-center border border-blue-100">
                     <div>
                         <p class="text-xs text-gray-600">Asientos elegidos:</p>
                         <p id="asiento-texto" class="font-bold text-blue-700">Ninguno</p>
                     </div>
-                    <button onclick="continuarCompra()" class="bg-blue-600 text-white px-4 py-2 rounded-xl text-sm font-semibold hover:bg-blue-700 transition">
+                    <button onclick="continuarCompra()" class="bg-blue-600 text-white px-4 py-2 rounded-xl text-sm font-semibold hover:bg-blue-700 transition shadow">
                         Continuar
                     </button>
                 </div>
@@ -115,12 +124,10 @@
     <script>
         let cantidadBoletos = 1;
         let horarioElegido = '';
-        let asientosElegidos = []; // Array para soportar múltiples selecciones
+        let asientosElegidos = [];
 
         function seleccionarCantidad(cantidad, elemento) {
             cantidadBoletos = cantidad;
-            
-            // Cambiar estilos visuales de los botones de cantidad
             document.querySelectorAll('.btn-cantidad').forEach(btn => {
                 btn.classList.remove('border-blue-600', 'bg-blue-50', 'text-blue-700');
                 btn.classList.add('border-gray-200', 'text-gray-700');
@@ -131,20 +138,18 @@
 
         function seleccionarHorario(horario) {
             horarioElegido = horario;
-            asientosElegidos = []; // Reiniciar selección anterior
+            asientosElegidos = [];
 
-            // Actualizar textos y badges
             document.getElementById('badge-resumen').innerText = `${horario} (${cantidadBoletos} boletos)`;
             document.getElementById('cantidad-texto-titulo').innerText = cantidadBoletos;
             document.getElementById('subtitulo-header').innerText = `Corrida: ${horario}`;
             document.getElementById('asiento-texto').innerText = 'Ninguno';
             
-            // Cambiar de vista
             document.getElementById('vista-horarios').classList.add('hidden');
             document.getElementById('vista-asientos').classList.remove('hidden');
             document.getElementById('vista-asientos').classList.add('flex');
             
-            generarAsientos();
+            generarAsientosVehiculo();
         }
 
         function regresarAHorarios() {
@@ -155,27 +160,46 @@
             document.getElementById('vista-horarios').classList.remove('hidden');
         }
 
-        function generarAsientos() {
+        function generarAsientosVehiculo() {
             const contenedor = document.getElementById('mapa-asientos');
             contenedor.innerHTML = '';
             
-            const ocupados = [3, 7, 12]; // Asientos ocupados de ejemplo
+            const ocupados = [3, 7, 12, 18]; // Ejemplo de asientos ocupados
+            const totalAsientos = 20; // 5 filas de 4 asientos (2 izq, pasillo, 2 der)
+            
+            let filaDiv = null;
 
-            for (let i = 1; i <= 21; i++) {
+            for (let i = 1; i <= totalAsientos; i++) {
+                // Crear una nueva fila cada 4 asientos para simular el plano de la van
+                if ((i - 1) % 4 === 0) {
+                    filaDiv = document.createElement('div');
+                    filaDiv.className = "flex justify-between items-center gap-4 px-2";
+                    contenedor.appendChild(filaDiv);
+                }
+
+                // Crear contenedor para agrupar de 2 en 2 (izq y der con pasillo al centro en el asiento 2 y 3)
+                if ((i - 1) % 4 === 2) {
+                    // Espacio visual para simular el pasillo central de la van
+                    const pasillo = document.createElement('div');
+                    pasillo.className = "w-6 flex items-center justify-center text-[10px] text-gray-300 font-bold";
+                    pasillo.innerText = "│";
+                    filaDiv.appendChild(pasillo);
+                }
+
                 const btn = document.createElement('button');
                 btn.innerText = i;
-                btn.className = "py-3 rounded-lg text-sm font-bold border transition flex items-center justify-center ";
+                btn.className = "w-10 h-10 rounded-xl text-xs font-bold border transition flex items-center justify-center shadow-sm ";
                 
                 if (ocupados.includes(i)) {
                     // Ocupado -> Rojo
-                    btn.classList.add('bg-red-500', 'border-red-500', 'text-white', 'cursor-not-allowed');
+                    btn.classList.add('bg-red-500', 'border-red-600', 'text-white', 'cursor-not-allowed');
                     btn.disabled = true;
                 } else {
                     // Libre -> Blanco
-                    btn.classList.add('bg-white', 'border-gray-300', 'text-gray-700', 'hover:border-blue-600');
+                    btn.classList.add('bg-white', 'border-gray-300', 'text-gray-700', 'hover:border-blue-600', 'hover:bg-blue-50');
                     btn.onclick = () => alternarAsiento(i, btn);
                 }
-                contenedor.appendChild(btn);
+                filaDiv.appendChild(btn);
             }
         }
 
@@ -183,23 +207,19 @@
             const index = asientosElegidos.indexOf(numero);
 
             if (index > -1) {
-                // Si ya estaba seleccionado, lo quitamos
                 asientosElegidos.splice(index, 1);
-                elemento.classList.remove('bg-blue-600', 'text-white', 'border-blue-600');
+                elemento.classList.remove('bg-blue-600', 'text-white', 'border-blue-600', 'shadow-md');
                 elemento.classList.add('bg-white', 'text-gray-700', 'border-gray-300');
             } else {
-                // Si no está seleccionado, validamos que no rebase el límite
                 if (asientosElegidos.length >= cantidadBoletos) {
                     alert(`Solo puedes seleccionar ${cantidadBoletos} asiento(s) según los boletos que pediste.`);
                     return;
                 }
-                // Lo agregamos y pintamos de Azul
                 asientosElegidos.push(numero);
                 elemento.classList.remove('bg-white', 'text-gray-700', 'border-gray-300');
-                elemento.classList.add('bg-blue-600', 'text-white', 'border-blue-600');
+                elemento.classList.add('bg-blue-600', 'text-white', 'border-blue-600', 'shadow-md');
             }
 
-            // Actualizar texto inferior
             if (asientosElegidos.length > 0) {
                 asientosElegidos.sort((a, b) => a - b);
                 document.getElementById('asiento-texto').innerText = `Asientos: #${asientosElegidos.join(', #')}`;
