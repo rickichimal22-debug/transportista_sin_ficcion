@@ -10,66 +10,97 @@
 
     <div class="max-w-md mx-auto bg-white min-h-screen shadow-lg flex flex-col">
         
-        <!-- Header -->
+        <!-- Header Común -->
         <header class="bg-blue-600 text-white p-4 text-center">
             <h1 class="text-xl font-bold">Transportes Fox</h1>
-            <p class="text-xs text-blue-100">Elige una corrida</p>
+            <p id="subtitulo-header" class="text-xs text-blue-100">Elige una corrida y cantidad de boletos</p>
         </header>
 
         <!-- Contenido Principal -->
-        <main class="p-4 flex-1 flex flex-col gap-6">
+        <main class="p-4 flex-1 flex flex-col">
 
-            <!-- Paso 1: Selección de Fecha y Horario -->
-            <section>
-                <h2 class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-2">1. Selecciona tu horario</h2>
-                <div class="grid grid-cols-2 gap-2">
-                    <button onclick="seleccionarHorario('07:00 AM')" class="p-3 border rounded-xl text-center hover:border-blue-600 focus:border-blue-600 focus:bg-blue-50 transition">
-                        <span class="block font-bold text-lg">07:00 AM</span>
-                        <span class="text-xs text-green-600 font-medium">12 lugares disp.</span>
-                    </button>
-                    <button onclick="seleccionarHorario('12:00 PM')" class="p-3 border rounded-xl text-center hover:border-blue-600 focus:border-blue-600 focus:bg-blue-50 transition">
-                        <span class="block font-bold text-lg">12:00 PM</span>
-                        <span class="text-xs text-green-600 font-medium">5 lugares disp.</span>
-                    </button>
-                    <button onclick="seleccionarHorario('05:00 PM')" class="p-3 border rounded-xl text-center hover:border-blue-600 focus:border-blue-600 focus:bg-blue-50 transition">
-                        <span class="block font-bold text-lg">05:00 PM</span>
-                        <span class="text-xs text-green-600 font-medium">18 lugares disp.</span>
-                    </button>
+            <!-- ================= VISTA 1: HORARIOS Y CANTIDAD ================= -->
+            <section id="vista-horarios" class="flex flex-col gap-5">
+                
+                <!-- Selector de Cantidad de Boletos -->
+                <div>
+                    <h2 class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-2">1. Cantidad de boletos</h2>
+                    <div class="flex gap-2">
+                        <button onclick="seleccionarCantidad(1, this)" class="btn-cantidad flex-1 py-2 border-2 border-blue-600 bg-blue-50 text-blue-700 rounded-xl font-bold text-center transition">1</button>
+                        <button onclick="seleccionarCantidad(2, this)" class="btn-cantidad flex-1 py-2 border-2 border-gray-200 text-gray-700 rounded-xl font-bold text-center transition hover:border-blue-400">2</button>
+                        <button onclick="seleccionarCantidad(3, this)" class="btn-cantidad flex-1 py-2 border-2 border-gray-200 text-gray-700 rounded-xl font-bold text-center transition hover:border-blue-400">3</button>
+                        <button onclick="seleccionarCantidad(4, this)" class="btn-cantidad flex-1 py-2 border-2 border-gray-200 text-gray-700 rounded-xl font-bold text-center transition hover:border-blue-400">4</button>
+                        <button onclick="seleccionarCantidad(5, this)" class="btn-cantidad flex-1 py-2 border-2 border-gray-200 text-gray-700 rounded-xl font-bold text-center transition hover:border-blue-400">5</button>
+                    </div>
+                </div>
+
+                <!-- Selección de Horario -->
+                <div>
+                    <h2 class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-2">2. Selecciona tu horario</h2>
+                    <div class="grid grid-cols-1 gap-3">
+                        <button onclick="seleccionarHorario('07:00 AM')" class="p-4 border rounded-xl text-left flex justify-between items-center hover:border-blue-600 hover:bg-blue-50 transition">
+                            <div>
+                                <span class="block font-bold text-lg">07:00 AM</span>
+                                <span class="text-xs text-gray-500">Ruta Centro - Terminal</span>
+                            </div>
+                            <span class="text-xs bg-green-100 text-green-700 font-semibold px-2.5 py-1 rounded-full">12 disp.</span>
+                        </button>
+                        
+                        <button onclick="seleccionarHorario('12:00 PM')" class="p-4 border rounded-xl text-left flex justify-between items-center hover:border-blue-600 hover:bg-blue-50 transition">
+                            <div>
+                                <span class="block font-bold text-lg">12:00 PM</span>
+                                <span class="text-xs text-gray-500">Ruta Centro - Terminal</span>
+                            </div>
+                            <span class="text-xs bg-green-100 text-green-700 font-semibold px-2.5 py-1 rounded-full">5 disp.</span>
+                        </button>
+
+                        <button onclick="seleccionarHorario('05:00 PM')" class="p-4 border rounded-xl text-left flex justify-between items-center hover:border-blue-600 hover:bg-blue-50 transition">
+                            <div>
+                                <span class="block font-bold text-lg">05:00 PM</span>
+                                <span class="text-xs text-gray-500">Ruta Centro - Terminal</span>
+                            </div>
+                            <span class="text-xs bg-green-100 text-green-700 font-semibold px-2.5 py-1 rounded-full">18 disp.</span>
+                        </button>
+                    </div>
                 </div>
             </section>
 
-            <!-- Paso 2: Mapa de Asientos (Crafter 21 Lugares) -->
-            <section id="seccion-asientos" class="hidden">
-                <div class="flex justify-between items-center mb-2">
-                    <h2 class="text-sm font-semibold text-gray-500 uppercase tracking-wider">2. Elige tu asiento</h2>
-                    <span id="horario-seleccionado" class="text-xs bg-blue-100 text-blue-800 font-semibold px-2 py-1 rounded-full"></span>
-                </div>
-                
-                <!-- Leyenda -->
-                <div class="flex justify-around text-xs text-gray-600 mb-4 bg-gray-50 p-2 rounded-lg">
-                    <div class="flex items-center gap-1"><span class="w-3 h-3 bg-white border border-gray-300 rounded-sm inline-block"></span> Libre</div>
-                    <div class="flex items-center gap-1"><span class="w-3 h-3 bg-blue-600 rounded-sm inline-block"></span> Seleccionado</div>
-                    <div class="flex items-center gap-1"><span class="w-3 h-3 bg-gray-300 rounded-sm inline-block"></span> Ocupado</div>
-                </div>
-
-                <!-- Vehículo (Crafter) -->
-                <div class="border-2 border-gray-300 rounded-2xl p-4 bg-gray-50 max-w-xs mx-auto">
-                    <!-- Frente / Chofer -->
-                    <div class="flex justify-between border-b pb-3 mb-4 text-xs font-bold text-gray-400">
-                        <span>🚪 Puerta</span>
-                        <span>🚌 Volante (Chofer)</span>
+            <!-- ================= VISTA 2: MAPA DE ASIENTOS (Oculta por defecto) ================= -->
+            <section id="vista-asientos" class="hidden flex-col flex-1 justify-between">
+                <div>
+                    <!-- Botón de Regresar y Horario Activo -->
+                    <div class="flex justify-between items-center mb-4">
+                        <button onclick="regresarAHorarios()" class="text-xs bg-gray-200 hover:bg-gray-300 font-semibold px-3 py-1.5 rounded-lg transition flex items-center gap-1">
+                            ← Cambiar selección
+                        </button>
+                        <span id="badge-resumen" class="text-xs bg-blue-100 text-blue-800 font-semibold px-2.5 py-1 rounded-full"></span>
                     </div>
 
-                    <!-- Cuadrícula de Asientos (Simulando distribución Crafter 21) -->
-                    <div id="mapa-asientos" class="grid grid-cols-4 gap-2">
-                        <!-- Se generarán por script o estáticos -->
+                    <h2 class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-2">Selecciona tus <span id="cantidad-texto-titulo">1</span> asientos</h2>
+                    
+                    <!-- Leyenda Actualizada -->
+                    <div class="flex justify-around text-xs text-gray-600 mb-4 bg-gray-50 p-2 rounded-lg">
+                        <div class="flex items-center gap-1"><span class="w-3 h-3 bg-white border border-gray-300 rounded-sm inline-block"></span> Libre</div>
+                        <div class="flex items-center gap-1"><span class="w-3 h-3 bg-blue-600 rounded-sm inline-block"></span> Seleccionado</div>
+                        <div class="flex items-center gap-1"><span class="w-3 h-3 bg-red-500 rounded-sm inline-block"></span> Ocupado</div>
+                    </div>
+
+                    <!-- Vehículo (Crafter) -->
+                    <div class="border-2 border-gray-300 rounded-2xl p-4 bg-gray-50 max-w-xs mx-auto mb-4">
+                        <div class="flex justify-between border-b pb-3 mb-4 text-xs font-bold text-gray-400">
+                            <span>🚪 Puerta</span>
+                            <span>🚌 Volante (Chofer)</span>
+                        </div>
+                        <div id="mapa-asientos" class="grid grid-cols-4 gap-2">
+                            <!-- Se generan por JavaScript -->
+                        </div>
                     </div>
                 </div>
 
-                <!-- Resumen y Continuar -->
-                <div class="mt-4 bg-blue-50 p-3 rounded-xl flex justify-between items-center">
+                <!-- Resumen y Continuar (Fijo abajo) -->
+                <div class="mt-auto bg-blue-50 p-3 rounded-xl flex justify-between items-center">
                     <div>
-                        <p class="text-xs text-gray-600">Asiento seleccionado:</p>
+                        <p class="text-xs text-gray-600">Asientos elegidos:</p>
                         <p id="asiento-texto" class="font-bold text-blue-700">Ninguno</p>
                     </div>
                     <button onclick="continuarCompra()" class="bg-blue-600 text-white px-4 py-2 rounded-xl text-sm font-semibold hover:bg-blue-700 transition">
@@ -82,22 +113,53 @@
     </div>
 
     <script>
+        let cantidadBoletos = 1;
         let horarioElegido = '';
-        let asientoElegido = null;
+        let asientosElegidos = []; // Array para soportar múltiples selecciones
+
+        function seleccionarCantidad(cantidad, elemento) {
+            cantidadBoletos = cantidad;
+            
+            // Cambiar estilos visuales de los botones de cantidad
+            document.querySelectorAll('.btn-cantidad').forEach(btn => {
+                btn.classList.remove('border-blue-600', 'bg-blue-50', 'text-blue-700');
+                btn.classList.add('border-gray-200', 'text-gray-700');
+            });
+            elemento.classList.remove('border-gray-200', 'text-gray-700');
+            elemento.classList.add('border-blue-600', 'bg-blue-50', 'text-blue-700');
+        }
 
         function seleccionarHorario(horario) {
             horarioElegido = horario;
-            document.getElementById('horario-seleccionado').innerText = horario;
-            document.getElementById('seccion-asientos').classList.remove('hidden');
+            asientosElegidos = []; // Reiniciar selección anterior
+
+            // Actualizar textos y badges
+            document.getElementById('badge-resumen').innerText = `${horario} (${cantidadBoletos} boletos)`;
+            document.getElementById('cantidad-texto-titulo').innerText = cantidadBoletos;
+            document.getElementById('subtitulo-header').innerText = `Corrida: ${horario}`;
+            document.getElementById('asiento-texto').innerText = 'Ninguno';
+            
+            // Cambiar de vista
+            document.getElementById('vista-horarios').classList.add('hidden');
+            document.getElementById('vista-asientos').classList.remove('hidden');
+            document.getElementById('vista-asientos').classList.add('flex');
+            
             generarAsientos();
+        }
+
+        function regresarAHorarios() {
+            asientosElegidos = [];
+            document.getElementById('subtitulo-header').innerText = 'Elige una corrida y cantidad de boletos';
+            document.getElementById('vista-asientos').classList.add('hidden');
+            document.getElementById('vista-asientos').classList.remove('flex');
+            document.getElementById('vista-horarios').classList.remove('hidden');
         }
 
         function generarAsientos() {
             const contenedor = document.getElementById('mapa-asientos');
             contenedor.innerHTML = '';
             
-            // Simulamos 21 asientos (algunos ocupados aleatoriamente para realismo)
-            const ocupados = [3, 7, 12]; 
+            const ocupados = [3, 7, 12]; // Asientos ocupados de ejemplo
 
             for (let i = 1; i <= 21; i++) {
                 const btn = document.createElement('button');
@@ -105,39 +167,53 @@
                 btn.className = "py-3 rounded-lg text-sm font-bold border transition flex items-center justify-center ";
                 
                 if (ocupados.includes(i)) {
-                    btn.classList.add('bg-gray-300', 'border-gray-300', 'text-gray-500', 'cursor-not-allowed');
+                    // Ocupado -> Rojo
+                    btn.classList.add('bg-red-500', 'border-red-500', 'text-white', 'cursor-not-allowed');
                     btn.disabled = true;
                 } else {
+                    // Libre -> Blanco
                     btn.classList.add('bg-white', 'border-gray-300', 'text-gray-700', 'hover:border-blue-600');
-                    btn.onclick = () => seleccionarAsiento(i, btn);
+                    btn.onclick = () => alternarAsiento(i, btn);
                 }
                 contenedor.appendChild(btn);
             }
         }
 
-        function seleccionarAsiento(numero, elemento) {
-            // Quitar selección anterior
-            document.querySelectorAll('#mapa-asientos button').forEach(b => {
-                if(!b.disabled && b.classList.contains('bg-blue-600')) {
-                    b.classList.remove('bg-blue-600', 'text-white', 'border-blue-600');
-                    b.classList.add('bg-white', 'text-gray-700', 'border-gray-300');
-                }
-            });
+        function alternarAsiento(numero, elemento) {
+            const index = asientosElegidos.indexOf(numero);
 
-            // Marcar nuevo
-            elemento.classList.remove('bg-white', 'text-gray-700', 'border-gray-300');
-            elemento.classList.add('bg-blue-600', 'text-white', 'border-blue-600');
-            
-            asientoElegido = numero;
-            document.getElementById('asiento-texto').innerText = `Asiento #${numero}`;
+            if (index > -1) {
+                // Si ya estaba seleccionado, lo quitamos
+                asientosElegidos.splice(index, 1);
+                elemento.classList.remove('bg-blue-600', 'text-white', 'border-blue-600');
+                elemento.classList.add('bg-white', 'text-gray-700', 'border-gray-300');
+            } else {
+                // Si no está seleccionado, validamos que no rebase el límite
+                if (asientosElegidos.length >= cantidadBoletos) {
+                    alert(`Solo puedes seleccionar ${cantidadBoletos} asiento(s) según los boletos que pediste.`);
+                    return;
+                }
+                // Lo agregamos y pintamos de Azul
+                asientosElegidos.push(numero);
+                elemento.classList.remove('bg-white', 'text-gray-700', 'border-gray-300');
+                elemento.classList.add('bg-blue-600', 'text-white', 'border-blue-600');
+            }
+
+            // Actualizar texto inferior
+            if (asientosElegidos.length > 0) {
+                asientosElegidos.sort((a, b) => a - b);
+                document.getElementById('asiento-texto').innerText = `Asientos: #${asientosElegidos.join(', #')}`;
+            } else {
+                document.getElementById('asiento-texto').innerText = 'Ninguno';
+            }
         }
 
         function continuarCompra() {
-            if (!asientoElegido) {
-                alert('Por favor selecciona un asiento antes de continuar.');
+            if (asientosElegidos.length < cantidadBoletos) {
+                alert(`Por favor selecciona los ${cantidadBoletos} asientos correspondientes antes de continuar.`);
                 return;
             }
-            alert(`¡Excelente! Horario: ${horarioElegido}, Asiento: ${asientoElegido}. Aquí abriría el formulario de datos y el envío por WhatsApp.`);
+            alert(`¡Excelente! Horario: ${horarioElegido}, Boletos: ${cantidadBoletos}, Asientos: #${asientosElegidos.join(', #')}.`);
         }
     </script>
 </body>
